@@ -1,7 +1,18 @@
 {
 	"name": "pnpm-ws-link",
-	"version": "0.0.0",
-	"description": "generate overrides from a folder, including monorepo packages",
+	"version": "0.0.1",
+	"description": "CLI tool to generate pnpm overrides for linking external workspace packages",
+	"keywords": ["pnpm", "workspace", "link", "overrides", "monorepo"],
+	"author": "wighawag",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/wighawag/pnpm-ws-link.git"
+	},
+	"homepage": "https://github.com/wighawag/pnpm-ws-link#readme",
+	"bugs": {
+		"url": "https://github.com/wighawag/pnpm-ws-link/issues"
+	},
 	"publishConfig": {
 		"access": "public"
 	},
@@ -23,6 +34,10 @@
 	"files": [
 		"dist"
 	],
+	"dependencies": {
+		"glob": "^10.4.5",
+		"js-yaml": "^4.1.1"
+	},
 	"devDependencies": {
 		"@types/js-yaml": "^4.0.9",
 		"@types/node": "^25.0.3",
@@ -33,9 +48,5 @@
 	"scripts": {
 		"build": "tsc --project tsconfig.json",
 		"dev": "as-soon -w src pnpm build"
-	},
-	"dependencies": {
-		"glob": "^10.4.5",
-		"js-yaml": "^4.1.1"
 	}
 }
