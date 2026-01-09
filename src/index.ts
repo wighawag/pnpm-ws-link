@@ -46,12 +46,24 @@ function detectIndentation(content: string): string {
 /**
  * Stringifies JSON with the same formatting as the original file
  * @param data The data to stringify
- * @param originalContent The original file content for indentation detection
- * @returns Formatted JSON string
+ * @param originalContent The original file content for formatting detection
+ * @returns Formatted JSON string that preserves original formatting
  */
 function stringifyWithOriginalFormatting(data: any, originalContent: string): string {
-	const detectedIndentation = detectIndentation(originalContent);
-	return JSON.stringify(data, null, detectedIndentation);
+    const detectedIndentation = detectIndentation(originalContent);
+
+    // Check if original content ends with a newline
+    const endsWithNewline = originalContent.endsWith('\n');
+
+    // Stringify with detected indentation
+    let result = JSON.stringify(data, null, detectedIndentation);
+
+    // Add newline at the end if the original had one
+    if (endsWithNewline) {
+        result += '\n';
+    }
+
+    return result;
 }
 
 /* ------------------------------------------------------------------ */
