@@ -12,6 +12,41 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 /* ------------------------------------------------------------------ */
 const readJSON = <T = unknown>(p: string): T => JSON.parse(readFileSync(p, 'utf8')) as T;
 
+/**
+ * Detects the indentation used in a package.json file
+ * @param filePath Path to the package.json file
+ * @returns The detected indentation (spaces or tabs)
+ */
+function detectIndentation(filePath: string): string {
+    const content = readFileSync(filePath, 'utf8');
+    const lines = content.split('\n');
+
+    // Find the first line that starts with indentation (after the opening brace)
+    for (const line of lines) {
+        if (line.trim().startsWith('"') && (line.startsWith(' ') || line.startsWith('\t'))) {
+            // Count the number of spaces or tabs at the beginning
+            const match = line.match(/^(\s+)/);
+            if (match) {
+                return match[1]; // Return the detected indentation
+            }
+        }
+    }
+
+    // Default to 2 spaces if no indentation is detected
+    return '  ';
+}
+
+/**
+ * Stringifies JSON with the same formatting as the original file
+ * @param data The data to stringify
+ * @param originalContent The original file content for indentation detection
+ * @returns Formatted JSON string
+ */
+function stringifyWithOriginalFormatting(data: any, originalContent: string): string {
+    const detectedIndentation = detectIndentation(originalContent);
+    return JSON.stringify(data, null, detectedIndentation);
+}
+
 /* ------------------------------------------------------------------ */
 /* interface                                                           */
 /* ------------------------------------------------------------------ */
@@ -109,7 +144,9 @@ if (dry) {
 
 	Object.assign(currentPkg.pnpm.overrides, overrides);
 
-	writeFileSync(currentPkgPath, JSON.stringify(currentPkg, null, 2));
+	   // Preserve the original formatting by reading the file content first
+	   const originalContent = readFileSync(currentPkgPath, 'utf8');
+	   writeFileSync(currentPkgPath, stringifyWithOriginalFormatting(currentPkg, originalContent));
 
 	console.log('Overrides added to package.json');
 }

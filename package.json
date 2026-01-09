@@ -1,6 +1,6 @@
 {
 	"name": "pnpm-ws-link",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"description": "CLI tool to generate pnpm overrides for linking external workspace packages",
 	"keywords": ["pnpm", "workspace", "link", "overrides", "monorepo"],
 	"author": "wighawag",
